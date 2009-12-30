@@ -1,4 +1,4 @@
-from utils import make_nsfind, ET, partial2
+from utils import make_nsfind, ET, partial2, RichResult
 import urllib
 
 # http://developer.yahoo.com/maps/rest/V1/geocode.html
@@ -11,7 +11,7 @@ def geocode(q, api_key):
     
     result = find(et, '//ns:Result')
     if not result:
-        return (None, (None, None))
+        return RichResult((None, (None, None)), data=None)
     else:
         namebits = {}
         for field in ('Address', 'City', 'State', 'Zip', 'Country'):
@@ -35,6 +35,6 @@ def geocode(q, api_key):
         lat = float(find(result, 'ns:Latitude').text)
         lon = float(find(result, 'ns:Longitude').text)
         
-        return (name, (lat, lon))
+        return RichResult((name, (lat, lon)), data=result)
     
 geocoder = partial2(geocode)

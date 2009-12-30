@@ -42,3 +42,13 @@ def partial2(fn):
         return inner2
     return inner1
 
+# Borrowed from 
+# http://geopy.googlecode.com/svn/branches/reverse-geocode/geopy/util.py
+# Allows for original tuple unpacking when the caller doesn't care about
+# extra data
+class RichResult(tuple):
+    def __new__(cls, *args, **kwargs):
+        obj = tuple.__new__(cls, *args)
+        for name, value in kwargs.items():
+            setattr(obj, name, value)
+        return obj

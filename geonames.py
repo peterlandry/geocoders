@@ -1,4 +1,4 @@
-from utils import simplejson
+from utils import simplejson, RichResult
 import urllib
 
 # http://www.geonames.org/export/geonames-search.html
@@ -13,13 +13,13 @@ def geocode(q):
         })
     ))
     if not data['geonames']:
-        return None, (None, None)
+        return RichResult((None, (None, None)), data=None)
     
     place = data['geonames'][0]
     name = place['name']
     if place['adminName1'] and place['name'] != place['adminName1']:
         name += ', ' + place['adminName1']
-    return name, (place['lat'], place['lng'])
+    return RichResult((name, (place['lat'], place['lng'])), data=data)
 
 # No API key required, but let's fulfil the contract anyway
 geocoder = lambda x: geocode

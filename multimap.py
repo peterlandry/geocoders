@@ -1,5 +1,5 @@
 import urllib
-from utils import simplejson, partial2
+from utils import simplejson, partial2, RichResult
 
 # http://www.multimap.com/openapidocs/1.2/web_service/ws_geocoding.htm
 
@@ -14,8 +14,8 @@ def geocode(q, api_key):
         lon = json['result_set'][0]['point']['lon']
         lat = json['result_set'][0]['point']['lat']
     except (KeyError, IndexError):
-        return None, (None, None)
+        return RichResult((None, (None, None)), data=None)
     name = json['result_set'][0]['address']['display_name']
-    return name, (lat, lon)
+    return RichResult((name, (lat, lon)), data=json)
 
 geocoder = partial2(geocode)

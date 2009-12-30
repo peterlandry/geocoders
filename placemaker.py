@@ -1,4 +1,4 @@
-from utils import make_nsfind, ET, partial2
+from utils import make_nsfind, ET, partial2, RichResult
 import urllib
 
 # http://developer.yahoo.com/geo/placemaker/guide/api_docs.html
@@ -17,11 +17,11 @@ def geocode(q, api_key):
     )
     place = find(et, 'ns:document/ns:placeDetails/ns:place')
     if place is None:
-        return None, (None, None)
+        return RichResult((None, (None, None)), data=None)
     else:
         name = find(place, 'ns:name').text.decode('utf8')
         lat = float(find(place, 'ns:centroid/ns:latitude').text)
         lon = float(find(place, 'ns:centroid/ns:longitude').text)
-        return name, (lat, lon)
+        return RichResult((name, (lat, lon)), data=place)
 
 geocoder = partial2(geocode)
